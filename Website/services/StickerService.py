@@ -37,6 +37,6 @@ class StickerService:
         return self.sticker_repository.delete(id)
 
     @staticmethod
-    def serialize(book):
-        serializer = StickerSerializer(book)
+    def serialize(stickers, many=False):
+        serializer = StickerSerializer(stickers, many=many)
         return serializer

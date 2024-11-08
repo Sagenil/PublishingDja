@@ -50,6 +50,6 @@ class ProductService:
         return self.product_repository.delete(id)
 
     @staticmethod
-    def serialize(product):
-        serializer = ProductSerializer(product)
+    def serialize(products, many=False):
+        serializer = ProductSerializer(products, many=many)
         return serializer

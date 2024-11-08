@@ -37,6 +37,6 @@ class BookService:
         return self.book_repository.delete(id)
 
     @staticmethod
-    def serialize(book):
-        serializer = BookSerializer(book)
+    def serialize(books, many=False):
+        serializer = BookSerializer(books, many=many)
         return serializer

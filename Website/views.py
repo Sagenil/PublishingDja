@@ -5,17 +5,11 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .services.BookService import BookService
-from .services.ProductService import ProductService
-from .services.StickerService import StickerService
 from . import service
 from .repositories.CustomUserRepository import CustomUserRepository
 from .serializers import CustomTokenObtainPairSerializer, RegisterSerializer, ProfileSerializer
 
 
-product_service = ProductService()
-book_service = BookService()
-sticker_service = StickerService()
 custom_user_repository = CustomUserRepository()
 
 
@@ -49,87 +43,85 @@ def update_profile(request):
 
 
 @api_view(['GET'])
-def get_product_by_params(request):
+def get_product_by_name(request):
     name = request.GET.get("name")
     if name is None:
         raise ValueError("Required parameter name not specified")
-    product = product_service.get_product_by_name(name)
-    product_data = product_service.serialize(product).data
+    product = service.get_product_by_name(name)
+    product_data = service.serialize_product(product).data
     return Response(product_data)
 
 
 @api_view(['GET'])
 def get_product(request, id):
-    product = product_service.get_product_by_id(id)
-    product_data = product_service.serialize(product).data
+    product = service.get_product(id)
+    product_data = service.serialize_product(product).data
     return Response(product_data)
+
+
+@api_view(['GET'])
+def get_all_products(request):
+    products = service.get_all_products()
+    products_data = service.serialize_products(products).data
+    return Response(products_data)
 
 
 @api_view(['POST'])
 def add_product(request):
-    service.add_product(request)
-    return Response()
+    try:
+        service.add_product(request)
+        return Response(status=201)
+    except Exception as e:
+        return Response(status=500, data={"error": e})
 
 
 @api_view(['PUT'])
 def update_product(request, id):
-    product_service.update_product(id, request.data)
+    service.update_product(id, request)
     return Response()
 
 
 @api_view(['DELETE'])
 def delete_product(request, id):
-    product_service.delete_product(id)
+    service.delete_product(id)
     return Response()
 
 
 @api_view(['GET'])
 def get_book(request, id):
-    book = book_service.get_book_by_id(id)
-    book_data = book_service.serialize(book).data
+    book = service.get_book(id)
+    book_data = service.serialize_book(book).data
     return Response(book_data)
 
 
-@api_view(['POST'])
-def add_book(request):
-    book_service.add_book(request.data)
-    return Response()
+@api_view(['GET'])
+def get_all_books(request):
+    books = service.get_all_books()
+    books_data = service.serialize_books(books).data
+    return Response(books_data)
 
 
 @api_view(['PUT'])
 def update_book(request, id):
-    book_service.update_book(id, request.data)
-    return Response()
-
-
-@api_view(['DELETE'])
-def delete_book(request, id):
-    book_service.delete_book(id)
+    service.update_book(id, request)
     return Response()
 
 
 @api_view(['GET'])
 def get_sticker(request, id):
-    sticker = sticker_service.get_sticker_by_id(id)
-    sticker_data = sticker_service.serialize(sticker).data
+    sticker = service.get_sticker(id)
+    sticker_data = service.serialize_sticker(sticker).data
     return Response(sticker_data)
 
 
-@api_view(['POST'])
-def add_sticker(request):
-    sticker_service.add_sticker(request.data)
-    return Response()
+@api_view(['GET'])
+def get_all_stickers(request):
+    stickers = service.get_all_stickers()
+    stickers_data = service.serialize_stickers(stickers).data
+    return Response(stickers_data)
 
 
 @api_view(['PUT'])
 def update_sticker(request, id):
-    sticker_service.update_sticker(id, request.data)
+    service.update_sticker(id, request)
     return Response()
-
-
-@api_view(['DELETE'])
-def delete_sticker(request, id):
-    sticker_service.delete_sticker(id)
-    return Response()
-
-
