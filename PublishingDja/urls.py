@@ -22,8 +22,11 @@ from Website import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('index/', views.index, name="index"),
+    path('product/new/book', views.add_book_view, name="add_book"),
+    path('product/new/sticker', views.add_sticker_view, name="add_sticker"),
     path('api/product', views.get_product_by_name),
-    path('api/product/<int:id>', views.get_product),
+    path('api/product/<int:id>', views.get_product, name="product"),
     path('api/product/all', views.get_all_products),
     path('api/product/new', views.add_product),
     path('api/product/update/<int:id>', views.update_product),
@@ -39,4 +42,9 @@ urlpatterns = [
     path('api/register/', views.RegisterView.as_view()),
     path('api/profile/', views.get_profile),
     path('api/profile/update/', views.update_profile),
+    path('foreignapi/account/new/', views.add_bank_account),
+    path('foreignapi/account', views.get_bank_account_by_email),
+    path('foreignapi/account/all/', views.get_all_bank_accounts, name='bank_accounts'),
+    path('foreignapi/account/delete/<int:id>', views.delete_bank_account),
+    path('foreignapi/account/delete/view', views.delete_bank_account_view, name="delete_bank_account"),
 ]

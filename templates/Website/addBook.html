@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Publishing website</title>
+</head>
+<body>
+    <h2>Add Product</h2>
+    <form method="POST" action="{% url 'add_book' %}">
+        {% csrf_token %}
+
+        <label for="type">Type: *</label>
+        <input type="text" id="type" name="type" value="BOOK" readonly><br><br>
+
+        <label for="name">Name: *</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="price">Price: *</label>
+        <input type="text" id="price" name="price" required><br><br>
+
+        <label for="title_image">Title image:</label>
+        <input type="text" id="title_image" name="title_image"><br><br>
+
+        <label for="description">Description:</label>
+        <input type="text" id="description" name="description"><br><br>
+
+        <label for="author">Author: *</label>
+        <input type="text" id="author" name="author"><br><br>
+
+        <label for="genre">Genre: *</label>
+        <input type="text" id="genre" name="genre"><br><br>
+
+        <input type="submit" value="Add Product">
+    </form>
+</body>
+</html>

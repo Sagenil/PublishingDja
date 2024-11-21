@@ -1,11 +1,13 @@
-from django.shortcuts import render
+from django.http import HttpResponse
+from django.shortcuts import render, redirect
+from django.template import loader
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from . import service
+from . import service, NetworkHelper
 from .repositories.CustomUserRepository import CustomUserRepository
 from .serializers import CustomTokenObtainPairSerializer, RegisterSerializer, ProfileSerializer
 
@@ -125,3 +127,61 @@ def get_all_stickers(request):
 def update_sticker(request, id):
     service.update_sticker(id, request)
     return Response()
+
+
+# Actual pages
+@api_view(['GET'])
+def index(request):
+    products = service.get_all_products()
+    template = loader.get_template("Website/index.html")
+    context = {
+        "products_list": products
+    }
+    return HttpResponse(template.render(context, request))
+
+
+def add_book_view(request):
+    if request.method == 'POST':
+        service.add_product(request)
+        return redirect('index')
+    return render(request, "Website/addBook.html")
+
+
+def add_sticker_view(request):
+    if request.method == 'POST':
+        service.add_product(request)
+        return redirect('index')
+    return render(request, "Website/addSticker.html")
+
+
+@api_view(['POST'])
+def add_bank_account(request):
+    response = NetworkHelper.add_account(request)
+    return Response(status=response.status_code)
+
+
+@api_view(['GET'])
+def get_bank_account_by_email(request):
+    email = request.GET.get("email")
+    response = NetworkHelper.get_account_by_email(email)
+    return Response(response.json(), status=response.status_code)
+
+
+@api_view(['GET'])
+def get_all_bank_accounts(request):
+    response = NetworkHelper.get_all_accounts()
+    return Response(response.json(), status=response.status_code)
+
+
+@api_view(['DELETE'])
+def delete_bank_account(request, id):
+    response = NetworkHelper.delete_account(id)
+    return Response(status=response.status_code)
+
+
+def delete_bank_account_view(request):
+    if request.method == 'POST':
+        NetworkHelper.delete_account(request.POST.get('id'))
+        return redirect('bank_accounts')
+    accounts_list = NetworkHelper.get_all_accounts().json()
+    return render(request, "Website/bankAccounts.html", {'accounts_list': accounts_list})

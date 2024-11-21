@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Publishing website</title>
+</head>
+<body>
+    <h2>
+        Add product:
+    </h2>
+    <a href="{% url 'add_book' %}"> Book </a> <br>
+    <a href="{% url 'add_sticker' %}"> Sticker </a> <br>
+    <ul>
+        {% for product in products_list %}
+            <li>
+                <a href="{% url 'product' product.id %}">{{ product.name }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

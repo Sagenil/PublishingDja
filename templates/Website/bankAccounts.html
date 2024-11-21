@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Publishing website</title>
+</head>
+<body>
+    <ul>
+        {% for account in accounts_list %}
+            <li>
+                <a href="/foreignapi/account?email={{ account.email }}">{{ account.email }}</a>
+                <form method="POST" action="{% url 'delete_bank_account' %}">
+                    {% csrf_token %}
+                    <label for="id">Account id: </label>
+                    <input type="text" name="id" id="id" value="{{ account.id }}" readonly>
+                    <input type="submit" value="Delete Account">
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

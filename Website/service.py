@@ -12,7 +12,14 @@ sticker_service = StickerService()
 
 
 def add_product(request):
-    request_data = request.data
+    if hasattr(request, 'data'):
+        request_data = request.data
+    else:
+        request_data = request.POST.dict()
+        if request_data['title_image'] == "":
+            request_data['title_image'] = None
+        if request_data['description'] == "":
+            request_data['description'] = None
     product = product_service.add_product(request_data)
     request_data['product_id'] = product.id
     if product.type == product.ProductType.BOOK:
