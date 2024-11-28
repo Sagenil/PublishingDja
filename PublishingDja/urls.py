@@ -25,6 +25,8 @@ urlpatterns = [
     path('index/', views.index, name="index"),
     path('product/new/book', views.add_book_view, name="add_book"),
     path('product/new/sticker', views.add_sticker_view, name="add_sticker"),
+    path('book/graphs', views.books_graphs_view),
+    path('distribution/graphs', views.distribution_graphs_view),
     path('api/product', views.get_product_by_name),
     path('api/product/<int:id>', views.get_product, name="product"),
     path('api/product/all', views.get_all_products),
