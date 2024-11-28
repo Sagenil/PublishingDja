@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Publishing Website</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.bokeh.org/bokeh/release/bokeh-3.4.3.min.css">
+    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-3.4.3.min.js"></script>
+</head>
+<body>
+    <h1>Books Visualization</h1>
+
+    <form method="get" action="">
+        <label for="top">Number of Books to Show:</label>
+        <input type="number" id="top" name="top" value="{{ top_n }}" min="1">
+        <br><br>
+        <label for="graph_type">Graph Type:</label>
+        <select id="graph_type" name="graph_type">
+            <option value="bar" {% if graph_type == "bar" %}selected{% endif %}>Bar Graph</option>
+            <option value="scatter" {% if graph_type == "scatter" %}selected{% endif %}>Scatter Plot</option>
+            <option value="pie" {% if graph_type == "pie" %}selected{% endif %}>Pie Chart</option>
+        </select>
+        <br><br>
+        <button type="submit">Update Graph</button>
+    </form>
+
+    <div>
+        <h2>Dynamic Graph (Plotly)</h2>
+        {{ plotly_chart|safe }}
+    </div>
+
+    <div>
+        <h2>Dynamic Graph (Bokeh)</h2>
+        <div>
+            {{ bokeh_div|safe }}
+        </div>>
+        {{ bokeh_script|safe }}
+    </div>
+</body>
+</html>

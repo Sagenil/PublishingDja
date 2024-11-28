@@ -38,11 +38,11 @@ class AggregatedRepository:
                         .select_related("product_id")
                         .annotate(price_range=models.Case(
                             models.When(product_id__price__lt=199.99, then=models.Value("<199,99 UAH")),
-                            models.When(product_id_price__gte=199.99, then=models.Value("199,99-299,99 UAH")),
+                            models.When(product_id__price__gte=199.99, then=models.Value("199,99-299,99 UAH")),
                             models.When(product_id__price__gte=299.99, then=models.Value("299,99-399,99 UAH")),
                             models.When(product_id__price__gte=399.99, then=models.Value("399,99-499,99 UAH")),
                             models.When(product_id__price__gte=499.99, then=models.Value(">499,99 UAH")),
-                            output_field=models.FloatField
+                            output_field=models.CharField()
                         ))
                         .values("price_range")
                         .annotate(count=models.Count("id"))
@@ -55,11 +55,11 @@ class AggregatedRepository:
                         .select_related("product_id")
                         .annotate(price_range=models.Case(
                         models.When(product_id__price__lt=199.99, then=models.Value("<199,99 UAH")),
-                            models.When(product_id_price__gte=199.99, then=models.Value("199,99-299,99 UAH")),
+                            models.When(product_id__price__gte=199.99, then=models.Value("199,99-299,99 UAH")),
                             models.When(product_id__price__gte=299.99, then=models.Value("299,99-399,99 UAH")),
                             models.When(product_id__price__gte=399.99, then=models.Value("399,99-499,99 UAH")),
                             models.When(product_id__price__gte=499.99, then=models.Value(">499,99 UAH")),
-                            output_field=models.FloatField
+                            output_field=models.CharField()
                         ))
                         .values("price_range")
                         .annotate(count=models.Count("id"))
